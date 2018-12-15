@@ -5,6 +5,11 @@ namespace System
 {
     public static class Throw
     {
+        public static void IfArgumentIsNull(string arg, string name)
+        {
+            if (arg == null)
+                throw new ArgumentNullException(name);
+        }
         public static void IfArgumentIsNull(object arg, string name)
         {
             if (arg == null)
