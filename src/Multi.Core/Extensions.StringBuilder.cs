@@ -6,7 +6,7 @@ namespace System
 {
     public static partial class Extensions
     {
-        public static StringBuilder AppendUserFriendlyTypeName(this StringBuilder sb, Type type, TypeNameStringShorteningFlags typeNameShorteningFlags = TypeNameStringShorteningFlags.All)
+        public static StringBuilder AppendFriendlyTypeName(this StringBuilder sb, Type type, TypeNameStringShorteningFlags typeNameShorteningFlags = TypeNameStringShorteningFlags.All)
         {
             if (sb == null)
                 throw new ArgumentNullException(nameof(sb));
@@ -22,7 +22,7 @@ namespace System
                 {
                     if (typeNameShorteningFlags.HasFlag(TypeNameStringShorteningFlags.ShortNullableTypeNames) && type.FullName.StartsWith("System.Nullable`1"))
                         //sb.Append(genArgTypes[0].Name).Append("?");
-                        AppendUserFriendlyTypeName(sb, genArgTypes[0], typeNameShorteningFlags).Append("?");
+                        AppendFriendlyTypeName(sb, genArgTypes[0], typeNameShorteningFlags).Append("?");
                     else
                     {
                         bool selfContaining = false;
@@ -42,7 +42,7 @@ namespace System
                             }
                             else
                             {
-                                AppendUserFriendlyTypeName(sb, genArgType, typeNameShorteningFlags);
+                                AppendFriendlyTypeName(sb, genArgType, typeNameShorteningFlags);
                             }
                             appendSeparator = true;
                         }

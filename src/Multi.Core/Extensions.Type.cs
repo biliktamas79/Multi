@@ -9,14 +9,14 @@ namespace System
 {
     public static partial class Extensions
     {
-        public static string GetUserFriendlyTypeName(this Type type, TypeNameStringShorteningFlags typeNameShorteningFlags = TypeNameStringShorteningFlags.All)
+        public static string GetFriendlyTypeName(this Type type, TypeNameStringShorteningFlags typeNameShorteningFlags = TypeNameStringShorteningFlags.All)
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
 
             if (type.IsConstructedGenericType)
             {
-                return AppendUserFriendlyTypeName(new StringBuilder(), type, typeNameShorteningFlags)
+                return AppendFriendlyTypeName(new StringBuilder(), type, typeNameShorteningFlags)
                     .ToString();
             }
             return typeNameShorteningFlags.HasFlag(TypeNameStringShorteningFlags.ExcludeNamespace) ? type.Name : type.FullName;
@@ -24,6 +24,9 @@ namespace System
 
         public static bool IsAnonymous(this Type type)
         {
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+
             var ti = type.GetTypeInfo();
             if ((type.Namespace == null)
                 && ti.IsGenericType
@@ -43,6 +46,9 @@ namespace System
 
         public static Type GetRootDeclaringType(this Type type)
         {
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+
             Type ret = type;
             while (ret.DeclaringType != null)
                 ret = ret.DeclaringType;
@@ -65,7 +71,8 @@ namespace System
             if (!iti.IsInterface)
                 throw new ArgumentException("The provided interfaceType is not an interface!", nameof(interfaceType));
 
-            return iti.ImplementedInterfaces.Contains(interfaceType);
+            return interfaceType.IsAssignableFrom(type);
+            //.ImplementedInterfaces.Contains(interfaceType);
         }
 
         public static Type[] GetGenericArguments(this Type type)

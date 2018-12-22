@@ -13,7 +13,7 @@ namespace Multi
             if (type == null)
                 throw new ArgumentNullException("type");
 
-            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "Value '{0}' of type '{1}' is not supported.", value, type.GetUserFriendlyTypeName(TypeNameStringShorteningFlags.ShortNullableTypeNames | TypeNameStringShorteningFlags.UseTypeNameAliases));
+            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "Value '{0}' of type '{1}' is not supported.", value, type.GetFriendlyTypeName(TypeNameStringShorteningFlags.ShortNullableTypeNames | TypeNameStringShorteningFlags.UseTypeNameAliases));
         }
 
         public static NotSupportedValueException New<T>(T value)

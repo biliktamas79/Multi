@@ -6,54 +6,32 @@ using System.Text;
 
 namespace Multi.Core.Tests.Unit
 {
-    public class LinkedListBase<T>
-    {
-        public T Next { get; set; }
-        public T Previous { get; set; }
-    }
-
-    public class PersonLinkedList : LinkedListBase<PersonLinkedList>
-    {
-        public string Name { get; set; }
-        public int Age { get; set; }
-    }
-
     [TestClass]
     public class SystemExtensionsStringBuilderUnitTests
     {
-        //private static readonly StringBuilder Sb = new StringBuilder();
-
-        #region AppendUserFriendlyTypeName
+        #region AppendFriendlyTypeName
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void StringBuilder_AppendUserFriendlyTypeName_Type_bool_bool_throws_ArgumentNullException_if_StringBuilder_isNull()
+        public void StringBuilder_AppendFriendlyTypeName_Type_bool_bool_throws_ArgumentNullException_if_StringBuilder_isNull()
         {
             StringBuilder sb = null;
-            sb.AppendUserFriendlyTypeName(typeof(int));
+            sb.AppendFriendlyTypeName(typeof(int));
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void StringBuilder_AppendUserFriendlyTypeName_Type_bool_bool_throws_ArgumentNullException_if_type_isNull()
+        public void StringBuilder_AppendFriendlyTypeName_Type_bool_bool_throws_ArgumentNullException_if_type_isNull()
         {
-            new StringBuilder().AppendUserFriendlyTypeName(null);
+            new StringBuilder().AppendFriendlyTypeName(null);
         }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(NotSupportedException))]
-        //public void StringBuilder_AppendUserFriendlyTypeName_Type_bool_bool_throws_NotSupportedException_if_type_isSelfContainingGeneric()
-        //{
-        //    var instance = new PersonLinkedList();
-        //    Sb.AppendUserFriendlyTypeName(instance.GetType());
-        //}
-
-        private class StringBuilderAppendUserFriendlyTypeNameTestArgs
+        private class StringBuilderAppendFriendlyTypeNameTestArgs
         {
             public readonly Type type;
             public readonly TypeNameStringShorteningFlags typeNameShorteningFlags;
             public readonly string ExpectedResult;
 
-            public StringBuilderAppendUserFriendlyTypeNameTestArgs(Type type, TypeNameStringShorteningFlags typeNameShorteningFlags, string expectedResult)
+            public StringBuilderAppendFriendlyTypeNameTestArgs(Type type, TypeNameStringShorteningFlags typeNameShorteningFlags, string expectedResult)
             {
                 this.type = type;
                 this.typeNameShorteningFlags = typeNameShorteningFlags;
@@ -74,7 +52,7 @@ namespace Multi.Core.Tests.Unit
         }
 
         [TestMethod]
-        public void StringBuilder_AppendUserFriendlyTypeName_returns_the_right_string()
+        public void StringBuilder_AppendFriendlyTypeName_returns_the_right_string()
         {
             var typeAliases = new CSharpTypesWithAlias[]
                 {
@@ -95,43 +73,43 @@ namespace Multi.Core.Tests.Unit
                     new CSharpTypesWithAlias(typeof(object), "object"),
                 };
 
-            var casesToTest = new List<StringBuilderAppendUserFriendlyTypeNameTestArgs>()
+            var casesToTest = new List<StringBuilderAppendFriendlyTypeNameTestArgs>()
                     {
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(List<bool?>), TypeNameStringShorteningFlags.All, "List<bool?>"),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(List<bool?>), TypeNameStringShorteningFlags.All, "List<bool?>"),
 
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(int?), TypeNameStringShorteningFlags.All, "int?"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(int?), TypeNameStringShorteningFlags.ExcludeNamespace, "Nullable<Int32>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(int?), TypeNameStringShorteningFlags.ShortNullableTypeNames, "System.Int32?"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(int?), TypeNameStringShorteningFlags.UseTypeNameAliases, "System.Nullable<int>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(int?), TypeNameStringShorteningFlags.None, "System.Nullable<System.Int32>"),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(int?), TypeNameStringShorteningFlags.All, "int?"),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(int?), TypeNameStringShorteningFlags.ExcludeNamespace, "Nullable<Int32>"),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(int?), TypeNameStringShorteningFlags.ShortNullableTypeNames, "System.Int32?"),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(int?), TypeNameStringShorteningFlags.UseTypeNameAliases, "System.Nullable<int>"),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(int?), TypeNameStringShorteningFlags.None, "System.Nullable<System.Int32>"),
 
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(List<int>), TypeNameStringShorteningFlags.All, "List<int>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(List<int>), TypeNameStringShorteningFlags.ExcludeNamespace, "List<Int32>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(List<int>), TypeNameStringShorteningFlags.ShortNullableTypeNames, "System.Collections.Generic.List<System.Int32>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(List<int>), TypeNameStringShorteningFlags.UseTypeNameAliases, "System.Collections.Generic.List<int>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(List<int>), TypeNameStringShorteningFlags.None, "System.Collections.Generic.List<System.Int32>"),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(List<int>), TypeNameStringShorteningFlags.All, "List<int>"),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(List<int>), TypeNameStringShorteningFlags.ExcludeNamespace, "List<Int32>"),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(List<int>), TypeNameStringShorteningFlags.ShortNullableTypeNames, "System.Collections.Generic.List<System.Int32>"),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(List<int>), TypeNameStringShorteningFlags.UseTypeNameAliases, "System.Collections.Generic.List<int>"),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(List<int>), TypeNameStringShorteningFlags.None, "System.Collections.Generic.List<System.Int32>"),
 
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(List<KeyValuePair<int, Queue<Nullable<int>>>>), TypeNameStringShorteningFlags.All,
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(List<KeyValuePair<int, Queue<Nullable<int>>>>), TypeNameStringShorteningFlags.All,
                             "List<KeyValuePair<int, Queue<int?>>>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(List<KeyValuePair<int, Queue<Nullable<int>>>>), TypeNameStringShorteningFlags.ExcludeNamespace,
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(List<KeyValuePair<int, Queue<Nullable<int>>>>), TypeNameStringShorteningFlags.ExcludeNamespace,
                             "List<KeyValuePair<Int32, Queue<Nullable<Int32>>>>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(List<KeyValuePair<int, Queue<Nullable<int>>>>), TypeNameStringShorteningFlags.ShortNullableTypeNames,
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(List<KeyValuePair<int, Queue<Nullable<int>>>>), TypeNameStringShorteningFlags.ShortNullableTypeNames,
                             "System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<System.Int32, System.Collections.Generic.Queue<System.Int32?>>>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(List<KeyValuePair<int, Queue<Nullable<int>>>>), TypeNameStringShorteningFlags.UseTypeNameAliases,
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(List<KeyValuePair<int, Queue<Nullable<int>>>>), TypeNameStringShorteningFlags.UseTypeNameAliases,
                             "System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<int, System.Collections.Generic.Queue<System.Nullable<int>>>>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeof(List<KeyValuePair<int, Queue<Nullable<int>>>>), TypeNameStringShorteningFlags.None,
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeof(List<KeyValuePair<int, Queue<Nullable<int>>>>), TypeNameStringShorteningFlags.None,
                             "System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<System.Int32, System.Collections.Generic.Queue<System.Nullable<System.Int32>>>>"),
                     };
 
             foreach (var typeWithAlias in typeAliases)
             {
-                casesToTest.AddRange(new StringBuilderAppendUserFriendlyTypeNameTestArgs[]
+                casesToTest.AddRange(new StringBuilderAppendFriendlyTypeNameTestArgs[]
                     {
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeWithAlias.type, TypeNameStringShorteningFlags.All, typeWithAlias.alias),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeWithAlias.type, TypeNameStringShorteningFlags.ExcludeNamespace, typeWithAlias.type.Name),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeWithAlias.type, TypeNameStringShorteningFlags.ShortNullableTypeNames, typeWithAlias.type.FullName),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeWithAlias.type, TypeNameStringShorteningFlags.UseTypeNameAliases, typeWithAlias.alias),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(typeWithAlias.type, TypeNameStringShorteningFlags.None, typeWithAlias.type.FullName),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeWithAlias.type, TypeNameStringShorteningFlags.All, typeWithAlias.alias),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeWithAlias.type, TypeNameStringShorteningFlags.ExcludeNamespace, typeWithAlias.type.Name),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeWithAlias.type, TypeNameStringShorteningFlags.ShortNullableTypeNames, typeWithAlias.type.FullName),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeWithAlias.type, TypeNameStringShorteningFlags.UseTypeNameAliases, typeWithAlias.alias),
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(typeWithAlias.type, TypeNameStringShorteningFlags.None, typeWithAlias.type.FullName),
                     });
 
                 if (typeWithAlias.type.IsValueType)
@@ -139,17 +117,17 @@ namespace Multi.Core.Tests.Unit
                     var type = typeof(Nullable<>).MakeGenericType(typeWithAlias.type); // ulong?
                     var listType = typeof(List<>).MakeGenericType(type); // List<ulong?>
 
-                    casesToTest.AddRange(new StringBuilderAppendUserFriendlyTypeNameTestArgs[]
+                    casesToTest.AddRange(new StringBuilderAppendFriendlyTypeNameTestArgs[]
                     {
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(listType, TypeNameStringShorteningFlags.All, 
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(listType, TypeNameStringShorteningFlags.All, 
                             $"List<{typeWithAlias.alias}?>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(listType, TypeNameStringShorteningFlags.ExcludeNamespace, 
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(listType, TypeNameStringShorteningFlags.ExcludeNamespace, 
                             $"List<Nullable<{typeWithAlias.type.Name}>>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(listType, TypeNameStringShorteningFlags.ShortNullableTypeNames,
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(listType, TypeNameStringShorteningFlags.ShortNullableTypeNames,
                             $"System.Collections.Generic.List<{typeWithAlias.type.FullName}?>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(listType, TypeNameStringShorteningFlags.UseTypeNameAliases,
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(listType, TypeNameStringShorteningFlags.UseTypeNameAliases,
                             $"System.Collections.Generic.List<System.Nullable<{typeWithAlias.alias}>>"),
-                        new StringBuilderAppendUserFriendlyTypeNameTestArgs(listType, TypeNameStringShorteningFlags.None,
+                        new StringBuilderAppendFriendlyTypeNameTestArgs(listType, TypeNameStringShorteningFlags.None,
                             $"System.Collections.Generic.List<System.Nullable<{typeWithAlias.type.FullName}>>"),
                     });
                 }
@@ -159,13 +137,13 @@ namespace Multi.Core.Tests.Unit
             foreach (var testCase in casesToTest)
             {
                 var result = sb.Clear()
-                    .AppendUserFriendlyTypeName(testCase.type, testCase.typeNameShorteningFlags)
+                    .AppendFriendlyTypeName(testCase.type, testCase.typeNameShorteningFlags)
                     .ToString();
 
-                Assert.AreEqual(testCase.ExpectedResult, result, $"AppendUserFriendlyTypeName test failed for Type='{testCase.type.FullName}', Flags='{testCase.typeNameShorteningFlags}'.");
-                //System.Diagnostics.Debug.WriteLine($"AppendUserFriendlyTypeName test passed for Type='{result}', Flags='{testCase.typeNameShorteningFlags}'.");
+                Assert.AreEqual(testCase.ExpectedResult, result, $"AppendFriendlyTypeName test failed for Type='{testCase.type.FullName}', Flags='{testCase.typeNameShorteningFlags}'.");
+                //System.Diagnostics.Debug.WriteLine($"AppendFriendlyTypeName test passed for Type='{result}', Flags='{testCase.typeNameShorteningFlags}'.");
             }
         }
-        #endregion AppendUserFriendlyTypeName
+        #endregion AppendFriendlyTypeName
     }
 }
