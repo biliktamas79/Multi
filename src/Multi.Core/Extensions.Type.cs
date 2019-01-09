@@ -19,7 +19,94 @@ namespace System
                 return AppendFriendlyTypeName(new StringBuilder(), type, typeNameShorteningFlags)
                     .ToString();
             }
+            else if (typeNameShorteningFlags.HasFlag(TypeNameStringShorteningFlags.UseTypeNameAliases))
+            {
+                if (TryGetNameAlias(type, out var alias))
+                    return alias;
+            }
             return typeNameShorteningFlags.HasFlag(TypeNameStringShorteningFlags.ExcludeNamespace) ? type.Name : type.FullName;
+        }
+
+        public static bool TryGetNameAlias(this Type type, out string alias)
+        {
+            if (type == typeof(bool))
+            {
+                alias = "bool";
+                return true;
+            }
+            else if (type == typeof(char))
+            {
+                alias = "char";
+                return true;
+            }
+            else if (type == typeof(string))
+            {
+                alias = "string";
+                return true;
+            }
+            else if (type == typeof(byte))
+            {
+                alias = "byte";
+                return true;
+            }
+            else if (type == typeof(sbyte))
+            {
+                alias = "sbyte";
+                return true;
+            }
+            else if (type == typeof(short))
+            {
+                alias = "short";
+                return true;
+            }
+            else if (type == typeof(ushort))
+            {
+                alias = "ushort";
+                return true;
+            }
+            else if (type == typeof(int))
+            {
+                alias = "int";
+                return true;
+            }
+            else if (type == typeof(uint))
+            {
+                alias = "uint";
+                return true;
+            }
+            else if (type == typeof(long))
+            {
+                alias = "long";
+                return true;
+            }
+            else if (type == typeof(ulong))
+            {
+                alias = "ulong";
+                return true;
+            }
+            else if (type == typeof(float))
+            {
+                alias = "float";
+                return true;
+            }
+            else if (type == typeof(double))
+            {
+                alias = "double";
+                return true;
+            }
+            else if (type == typeof(decimal))
+            {
+                alias = "decimal";
+                return true;
+            }
+            else if (type == typeof(object))
+            {
+                alias = "object";
+                return true;
+            }
+
+            alias = null;
+            return false;
         }
 
         public static bool IsAnonymous(this Type type)

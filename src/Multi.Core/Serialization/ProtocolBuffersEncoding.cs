@@ -362,10 +362,10 @@ namespace Multi.Serialization
         {
             if (value == null)
                 Write(stream, (int)0);
-            else
-            {
+            else if (value.Value >= 0)
                 Write(stream, ((int)value.Value) + 1);
-            }
+            else //if (value.Value < 0)
+                Write(stream, ((int)value.Value) - 1);
         }
 
         public static Int16? ReadNullableInt16(Stream stream)
@@ -373,8 +373,10 @@ namespace Multi.Serialization
             int l = ReadInt32(stream);
             if (l == 0)
                 return null;
-            else
+            else if (l > 0)
                 return (Int16)(l - 1);
+            else //if (l < 0)
+                return (Int16)(l + 1);
         }
         #endregion Int16?
 
@@ -444,10 +446,10 @@ namespace Multi.Serialization
         {
             if (value == null)
                 Write(stream, (long)0);
-            else
-            {
+            else if(value.Value >= 0)
                 Write(stream, ((long)value.Value) + 1);
-            }
+            else //if (value.Value < 0)
+                Write(stream, ((long)value.Value) - 1);
         }
 
         public static Int32? ReadNullableInt32(Stream stream)
@@ -455,8 +457,10 @@ namespace Multi.Serialization
             long l = ReadInt64(stream);
             if (l == 0)
                 return null;
-            else
+            else if (l > 0)
                 return (Int32)(l - 1);
+            else //if (l < 0)
+                return (Int32)(l + 1);
         }
         #endregion Int32
 

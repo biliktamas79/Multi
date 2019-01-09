@@ -56,36 +56,8 @@ namespace System
             {
                 if (typeNameShorteningFlags.HasFlag(TypeNameStringShorteningFlags.UseTypeNameAliases))
                 {
-                    if (type == typeof(bool))
-                        sb.Append("bool");
-                    else if (type == typeof(char))
-                        sb.Append("char");
-                    else if (type == typeof(string))
-                        sb.Append("string");
-                    else if (type == typeof(byte))
-                        sb.Append("byte");
-                    else if (type == typeof(sbyte))
-                        sb.Append("sbyte");
-                    else if (type == typeof(short))
-                        sb.Append("short");
-                    else if (type == typeof(ushort))
-                        sb.Append("ushort");
-                    else if (type == typeof(int))
-                        sb.Append("int");
-                    else if (type == typeof(uint))
-                        sb.Append("uint");
-                    else if (type == typeof(long))
-                        sb.Append("long");
-                    else if (type == typeof(ulong))
-                        sb.Append("ulong");
-                    else if (type == typeof(float))
-                        sb.Append("float");
-                    else if (type == typeof(double))
-                        sb.Append("double");
-                    else if (type == typeof(decimal))
-                        sb.Append("decimal");
-                    else if (type == typeof(object))
-                        sb.Append("object");
+                    if (TryGetNameAlias(type, out var alias))
+                        sb.Append(alias);
                     else
                         sb.Append(typeName);
                 }
