@@ -69,7 +69,7 @@ namespace Multi.Core.Tests.Unit.Serialization
                 WriteReadCompare<Guid>(ms, SerializationTestGlobals.GuidValuesToCheck, (writer, value) => writer.Write(value), reader => reader.ReadGuid());
                 WriteReadCompare<Guid?>(ms, SerializationTestGlobals.GuidValuesToCheck.Cast<Guid?>().Append(null), (writer, value) => writer.Write(value), reader => reader.ReadNullableGuid());
 
-                // array
+                // byte array
                 WriteReadCompare<byte[]>(ms, new byte[][] { SerializationTestGlobals.ByteValuesToCheck, null, new byte[]{ } }, (writer, value) => writer.Write(value), reader => reader.ReadByteArray(), ArrayComparer<byte>.Default);
             }
         }

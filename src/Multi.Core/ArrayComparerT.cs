@@ -4,6 +4,11 @@ using System.Text;
 
 namespace Multi
 {
+    /// <summary>
+    /// Generic array comparer class that implements the <see cref="IEqualityComparer{T}"/> interface.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <seealso cref="System.Collections.Generic.IEqualityComparer{T[]}" />
     public class ArrayComparer<T> : IEqualityComparer<T[]>
     {
         /// <summary>
@@ -33,7 +38,7 @@ namespace Multi
         }
 
         /// <summary>
-        /// c
+        /// Determines whether the specified arrays have the same length and contains the same items in the same order.
         /// </summary>
         /// <param name="arr1">The first array.</param>
         /// <param name="arr2">The second array</param>
@@ -74,11 +79,26 @@ namespace Multi
             return false;
         }
 
+        /// <summary>
+        /// Determines whether the specified objects are equal.
+        /// </summary>
+        /// <param name="x">The first object of type T to compare.</param>
+        /// <param name="y">The second object of type T to compare.</param>
+        /// <returns>
+        /// true if the specified objects are equal; otherwise, false.
+        /// </returns>
         public bool Equals(T[] x, T[] y)
         {
             return AreEqual(x, y, _checkEquality);
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public int GetHashCode(T[] obj)
         {
             if (obj == null)
