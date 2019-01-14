@@ -30,14 +30,14 @@ namespace Multi.Data
         /// <param name="throwIfNotFound">True to throw <see cref="EntityNotFoundByPkException"/>, false to return null if the entity with the provided primary key not found</param>
         /// <exception cref="EntityNotFoundByPkException">Thrown when <paramref name="throwIfNotFound"/> is true and the entity with the provided primary key not found</exception>
         /// <returns>The entity with the provided primary key or null</returns>
-        public static TEntity Get<TPrimaryKey, TEntity>(this IEntityQueryByPk<TPrimaryKey, TEntity> repo, TPrimaryKey pk, bool throwIfNotFound)
+        public static TEntity GetByPk<TPrimaryKey, TEntity>(this IEntityQueryByPk<TPrimaryKey, TEntity> repo, TPrimaryKey pk, bool throwIfNotFound)
             where TEntity : IReadOnlyPkHolder<TPrimaryKey>
         {
             if (repo == null)
                 throw new ArgumentNullException(nameof(repo));
 
             TEntity entity;
-            repo.TryGet(pk, out entity);
+            repo.TryGetByPk(pk, out entity);
             if (throwIfNotFound && (entity == null))
                 throw EntityNotFoundByPkException.New<TPrimaryKey, TEntity>(pk);
             return entity;

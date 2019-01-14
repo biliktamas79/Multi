@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Multi.Data
 {
@@ -11,7 +12,7 @@ namespace Multi.Data
     /// </summary>
     /// <typeparam name="TPrimaryKey">The type of the primary key</typeparam>
     /// <typeparam name="TEntity">The type of the entity</typeparam>
-    public interface IEntityQuery<TPrimaryKey, TEntity> : IEntityQuery<TEntity>
+    public interface IEntityQueryAsync<TPrimaryKey, TEntity> : IEntityQuery<TEntity>
         where TEntity : IReadOnlyPkHolder<TPrimaryKey>
 	{
         /// <summary>
@@ -22,7 +23,7 @@ namespace Multi.Data
         /// <param name="skip">The count of entities to skip. (Default = 0)</param>
         /// <param name="take">The count of entities to take. (Default = -1, meaning all entities)</param>
         /// <returns>Returns the primary keys of entities matching the optional entity filter</returns>
-        IEnumerable<TPrimaryKey> GetPks(Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, uint skip = 0, uint take = 0);
+        IEnumerable<Task<TPrimaryKey>> GetPks(Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, uint skip = 0, uint take = 0);
 
         /// <summary>
         /// Gets the primary keys of entities matching the provided entity filter transformed by the provided primary key converter
@@ -35,6 +36,6 @@ namespace Multi.Data
         /// <param name="take">The count of entities to take. (Default = -1, meaning all entities)</param>
         /// <returns>Returns the primary keys of entities matching the provided entity filter transformed by the provided primary key converter</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="pkConverter"/> is null.</exception>
-        IEnumerable<T> GetPks<T>(Expression<Func<TPrimaryKey, T>> pkConverter, Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, uint skip = 0, uint take = 0);
+        IEnumerable<Task<T>> GetPks<T>(Expression<Func<TPrimaryKey, T>> pkConverter, Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, uint skip = 0, uint take = 0);
     }
 }

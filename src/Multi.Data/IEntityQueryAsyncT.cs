@@ -2,29 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace Multi.Data
 {
     /// <summary>
-    /// Basic generic query interface of entity types
+    /// Asynchronous basic generic query interface of entity types
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity</typeparam>
-	public interface IEntityQuery<TEntity>
+	public interface IEntityQueryAsync<TEntity>
 	{
         /// <summary>
         /// Checks whether there are any entities matching the provided optional entity filter
         /// </summary>
         /// <param name="filter">The optional entity filter</param>
         /// <returns>Returns true if there is at least one entity matching the provided entity filter</returns>
-		bool Any(Expression<Func<TEntity, bool>> filter = null);
+		Task<bool> Any(Expression<Func<TEntity, bool>> filter = null);
 
         /// <summary>
         /// Gets the count of entities matching the provided optional entity filter
         /// </summary>
         /// <param name="filter">The optional entity filter</param>
         /// <returns>Returns the count of entities matching the provided entity filter</returns>
-        uint Count(Expression<Func<TEntity, bool>> filter = null);
+        Task<uint> Count(Expression<Func<TEntity, bool>> filter = null);
 
         /// <summary>
         /// Gets the entities matching the provided optional entity filter, ordering and paging values
@@ -34,7 +34,7 @@ namespace Multi.Data
         /// <param name="skip">The count of entities to skip. (Default = 0)</param>
         /// <param name="take">The count of entities to take. (Default = -1, meaning all entities)</param>
         /// <returns>Returns an enumerator of the result entities</returns>
-        IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, uint skip = 0, uint take = 0);
+        IEnumerable<Task<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, uint skip = 0, uint take = 0);
 
         /// <summary>
         /// Gets the entities matching the provided optional entity filter, ordering and paging values, transformed by the provided converter
@@ -47,6 +47,6 @@ namespace Multi.Data
         /// <param name="take">The count of entities to take. (Default = -1, meaning all entities)</param>
         /// <returns>Returns an enumerator of the result entities transformed by the provided converter</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="converter"/> is null.</exception>
-        IEnumerable<T> Get<T>(Expression<Func<TEntity, T>> converter, Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, uint skip = 0, uint take = 0);
+        IEnumerable<Task<T>> Get<T>(Expression<Func<TEntity, T>> converter, Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, uint skip = 0, uint take = 0);
 	}
 }

@@ -13,6 +13,7 @@ namespace Multi.Data
     [Serializable]
     public class EntityNotFoundException : ApplicationException//, ISerializable
     {
+        #region STATIC
         /// <summary>
         /// Gets the default message of entity not found exception.
         /// </summary>
@@ -26,6 +27,7 @@ namespace Multi.Data
 
             return string.Format(System.Globalization.CultureInfo.InvariantCulture, "Entity (Type='{0}') not found.", entityType);
         }
+        #endregion STATIC
 
         #region CONSTRUCTORS        
         /// <summary>
