@@ -1,14 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-
-namespace Multi.Data
+﻿namespace Multi.Data
 {
     /// <summary>
     /// Class describing an ordering represented by a name, direction and character casing.
     /// </summary>
     public class OrderBy
     {
+        public OrderBy()
+        { }
+
+        public OrderBy(string name, OrderEnum order, CharacterCasingEnum casing = CharacterCasingEnum.Unchanged)
+        {
+            this.Name = name;
+            this.Order = order;
+            this.Casing = casing;
+        }
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>

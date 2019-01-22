@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multi.Core", "Multi.Core\Mu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multi.Core.Tests.Unit", "Multi.Core.Tests.Unit\Multi.Core.Tests.Unit.csproj", "{E579FDA7-5A58-4052-8359-B5565B444EC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multi.Data", "Multi.Data\Multi.Data.csproj", "{B9656714-47C7-403A-86F7-AB8DB74C902D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multi.Data", "Multi.Data\Multi.Data.csproj", "{B9656714-47C7-403A-86F7-AB8DB74C902D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Multi.Data.ADO", "Multi.Data.ADO\Multi.Data.ADO.csproj", "{430081B2-28C7-4AD7-A10A-B6179852DD9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multi.Data.Tests.Unit", "Multi.Data.Tests.Unit\Multi.Data.Tests.Unit.csproj", "{027BD316-FF58-40DE-8F3A-79C5A84DD323}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{B9656714-47C7-403A-86F7-AB8DB74C902D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9656714-47C7-403A-86F7-AB8DB74C902D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9656714-47C7-403A-86F7-AB8DB74C902D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{430081B2-28C7-4AD7-A10A-B6179852DD9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{430081B2-28C7-4AD7-A10A-B6179852DD9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{430081B2-28C7-4AD7-A10A-B6179852DD9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{430081B2-28C7-4AD7-A10A-B6179852DD9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{027BD316-FF58-40DE-8F3A-79C5A84DD323}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{027BD316-FF58-40DE-8F3A-79C5A84DD323}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{027BD316-FF58-40DE-8F3A-79C5A84DD323}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{027BD316-FF58-40DE-8F3A-79C5A84DD323}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

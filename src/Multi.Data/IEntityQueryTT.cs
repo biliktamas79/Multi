@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Multi.Data
 {
@@ -22,7 +20,7 @@ namespace Multi.Data
         /// <param name="skip">The count of entities to skip. (Default = 0)</param>
         /// <param name="take">The count of entities to take. (Default = -1, meaning all entities)</param>
         /// <returns>Returns the primary keys of entities matching the optional entity filter</returns>
-        IEnumerable<TPrimaryKey> GetPks(Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, uint skip = 0, uint take = 0);
+        IEnumerable<TPrimaryKey> GetPks(Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, int skip = 0, int take = 0);
 
         /// <summary>
         /// Gets the primary keys of entities matching the provided entity filter transformed by the provided primary key converter
@@ -35,6 +33,6 @@ namespace Multi.Data
         /// <param name="take">The count of entities to take. (Default = -1, meaning all entities)</param>
         /// <returns>Returns the primary keys of entities matching the provided entity filter transformed by the provided primary key converter</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="pkConverter"/> is null.</exception>
-        IEnumerable<T> GetPks<T>(Expression<Func<TPrimaryKey, T>> pkConverter, Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, uint skip = 0, uint take = 0);
+        IEnumerable<T> GetPks<T>(Expression<Func<TPrimaryKey, T>> pkConverter, Expression<Func<TEntity, bool>> filter = null, OrderBy[] orderBy = null, int skip = 0, int take = 0);
     }
 }
