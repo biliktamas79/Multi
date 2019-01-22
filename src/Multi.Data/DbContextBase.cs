@@ -46,7 +46,7 @@ namespace Multi.Data
         #endregion
 
         /// <summary>
-        /// Initializes this instance.
+        /// Initializes this database context instance.
         /// </summary>
         public abstract void Init();
 

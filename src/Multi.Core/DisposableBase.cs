@@ -70,6 +70,27 @@ namespace Multi
             return false;
         }
 
+        /// <summary>
+        /// Disposes this object instance if it's not null and implements the <see cref="IDisposable"/> interface.
+        /// </summary>
+        /// <param name="o">The object to dispose</param>
+        /// <returns>Returns true if the object was not null and was diposed successfully.</returns>
+        protected bool TryDispose(object o)
+        {
+            if (object.ReferenceEquals(o, null))
+                return false;
+
+            IDisposable d = o as IDisposable;
+            if (d != null)
+            {
+                d.Dispose();
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} instance disposed.", d.GetType().GetFriendlyTypeName()), "Dispose");
+                return true;
+            }
+
+            return false;
+        }
+
         #region IDisposable Members        
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

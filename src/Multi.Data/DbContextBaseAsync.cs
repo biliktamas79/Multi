@@ -24,15 +24,22 @@ namespace Multi.Data
 		{
             this.Logger = logger;
             ModelEntityRegistrationsByType = new Dictionary<Type, ModelEntityRegistrationBase>();
+
+            this.Logger?.LogDbCtxCreation(LogLevel.Debug);
         }
         protected DbContextBaseAsync(int modelEntityRegistrationsInitialCapacity, ILogger logger)
         {
             this.Logger = logger;
             ModelEntityRegistrationsByType = new Dictionary<Type, ModelEntityRegistrationBase>(modelEntityRegistrationsInitialCapacity);
+
+            this.Logger?.LogDbCtxCreation(LogLevel.Debug);
         }
 
         #region IOwnedByThread Members
         private int _ownerThreadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
+        /// <summary>
+        /// Gets the managed thread identifier of the owner thread
+        /// </summary>
         public int OwnerThreadId
         {
             get { return _ownerThreadId; }
@@ -68,6 +75,8 @@ namespace Multi.Data
             var tmp = this.IsBusyChanged;
             if (tmp != null)
                 tmp(!isBusy, isBusy);
+
+            this.Logger?.LogDbCtxIsBusyChanged(LogLevel.Debug, isBusy);
         }
         /// <summary>
         /// Event that is triggered after the <see cref="IsBusy"/> property value changed
@@ -75,14 +84,22 @@ namespace Multi.Data
         public event ValueChangeDelegate<bool> IsBusyChanged;
         #endregion IsBusy
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
 		{
 			if (disposing && !this.IsDisposed)
 			{
+                try
+                {
 				if (_uowDict != null)
 				{
 					lock (_uowDictLockObj)
 					{
+                            this.Logger?.LogDbCtxDisposing(LogLevel.Debug);
+
 						if ((_uowDict != null) && (_uowDict.Count > 0))
 						{
 							List<KeyValuePair<int, IUnitOfWorkBaseAsync>> list = new List<KeyValuePair<int, IUnitOfWorkBaseAsync>>(_uowDict);
@@ -95,7 +112,10 @@ namespace Multi.Data
 									{
 										kvp.Value.Dispose();
 									}
-									_uowDict.TryRemove(kvp.Key, out var removed);
+                                        if (_uowDict.TryRemove(kvp.Key, out var removed))
+                                        {
+                                            this.Logger?.LogUowRemovalFromDbCtx(LogLevel.Debug, kvp.Key);
+                                        }
 								}
 								catch (Exception ex)
 								{
@@ -117,7 +137,14 @@ namespace Multi.Data
 					}
 				}
                 this.IsBusy = false;
-			}
+
+                    this.Logger?.LogDbCtxDisposeSuccess(LogLevel.Debug);
+                }
+                catch (Exception ctxDisposeEx)
+                {
+                    this.Logger?.LogDbCtxDisposeFailed(LogLevel.Error, ctxDisposeEx);
+                }
+            }
 		}
 	}
 }
