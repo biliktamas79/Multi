@@ -10,28 +10,29 @@ using System.Threading.Tasks;
 
 namespace Multi.Data
 {
+    using EntityRegistration;
+    using UnitOfWork;
+
     /// <summary>
     /// Abstract base class for async database contexts
     /// </summary>
     public abstract partial class DbContextBaseAsync : DisposableBase, IOwnedByThread, IFluentInterface
     {
         /// <summary>
+        /// Read-only model entity registry instance containing the model entity registrations by entity type
+        /// </summary>
+        protected readonly ModelEntityRegistry ModelEntityRegistrationsByType;
+        /// <summary>
         /// Read-only logger instance
         /// </summary>
-        public readonly ILogger Logger;
+        protected readonly ILogger Logger;
 
-		protected DbContextBaseAsync(ILogger logger)
+		protected DbContextBaseAsync(ModelEntityRegistry modelEntityRegistry, ILogger logger)
 		{
-            this.Logger = logger;
-            ModelEntityRegistrationsByType = new Dictionary<Type, ModelEntityRegistrationBase>();
+            Throw.IfArgumentIsNull(modelEntityRegistry, nameof(modelEntityRegistry));
 
-            this.Logger?.LogDbCtxCreation(LogLevel.Debug);
-        }
-        protected DbContextBaseAsync(int modelEntityRegistrationsInitialCapacity, ILogger logger)
-        {
+            ModelEntityRegistrationsByType = modelEntityRegistry;
             this.Logger = logger;
-            ModelEntityRegistrationsByType = new Dictionary<Type, ModelEntityRegistrationBase>(modelEntityRegistrationsInitialCapacity);
-
             this.Logger?.LogDbCtxCreation(LogLevel.Debug);
         }
 
@@ -47,9 +48,20 @@ namespace Multi.Data
         #endregion
 
         /// <summary>
+        /// Returns the enumeration of model entity registrations of this database context.
+        /// </summary>
+        /// <returns>
+        /// An enumeration of model entity registrations of this database context.
+        /// </returns>
+        public IEnumerable<KeyValuePair<Type, ModelEntityRegistrationBase>> GetModelEntityRegistrations()
+        {
+            return ModelEntityRegistrationsByType;
+        }
+
+        /// <summary>
         /// Initializes this database context instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns the awaitable task of the initialization</returns>
         public abstract Task Init();
 
         #region IsBusy
@@ -93,48 +105,42 @@ namespace Multi.Data
 			if (disposing && !this.IsDisposed)
 			{
                 try
-                {
-				if (_uowDict != null)
-				{
-					lock (_uowDictLockObj)
-					{
-                            this.Logger?.LogDbCtxDisposing(LogLevel.Debug);
+               {
+                    this.Logger?.LogDbCtxDisposing(LogLevel.Debug);
 
-						if ((_uowDict != null) && (_uowDict.Count > 0))
-						{
-							List<KeyValuePair<int, IUnitOfWorkBaseAsync>> list = new List<KeyValuePair<int, IUnitOfWorkBaseAsync>>(_uowDict);
+                    if (!this.UowsById.IsEmpty)
+                    {
+                        var list = new List<KeyValuePair<int, IUnitOfWorkBase>>(this.UowsById);
 
-                            foreach (var kvp in list)
-							{
-								try
-								{
-									if (kvp.Value != null)
-									{
-										kvp.Value.Dispose();
-									}
-                                        if (_uowDict.TryRemove(kvp.Key, out var removed))
-                                        {
-                                            this.Logger?.LogUowRemovalFromDbCtx(LogLevel.Debug, kvp.Key);
-                                        }
-								}
-								catch (Exception ex)
-								{
-                                    try
-                                    {
-                                        Logger?.LogCritical(ex, "Error disposing IUnitOfWorkBase ({uow.id}, {uow.type}) instance while disposing {type}.", kvp.Key, kvp.Value.GetType(), this.GetType());
+                        foreach (var kvp in list)
+                        {
+                            try
+                            {
+                                if (kvp.Value != null)
+                                {
+                                    kvp.Value.Dispose();
+                                }
+                                if (this.UowsById.TryRemove(kvp.Key, out var removed))
+                                {
+                                    this.Logger?.LogUowRemovalFromDbCtx(LogLevel.Debug, kvp.Key);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                try
+                                {
+                                    Logger?.LogCritical(ex, "Error disposing IUnitOfWorkBase ({uow.id}, {uow.type}) instance while disposing {type}.", kvp.Key, kvp.Value.GetType(), this.GetType());
 
-                                        System.Diagnostics.Debug.WriteLine(string.Format("Error disposing IUnitOfWorkBase while disposing {0}!\r\n\r\n", this.GetType().GetFriendlyTypeName()) + ex.ToString(), "ERROR");
-                                    }
-                                    catch (Exception)
-                                    {
-                                        // lenyeljük
-                                    }
-								}
-							}
-							_uowDict.Clear();
-						}
-						_uowDict = null;
-					}
+                                    System.Diagnostics.Debug.WriteLine(string.Format("Error disposing IUnitOfWorkBase while disposing {0}!\r\n\r\n", this.GetType().GetFriendlyTypeName()) + ex.ToString(), "ERROR");
+                                }
+                                catch (Exception)
+                                {
+                                    // lenyeljük
+                                }
+                            }
+                        }
+
+                        this.UowsById.Clear();
 				}
                 this.IsBusy = false;
 

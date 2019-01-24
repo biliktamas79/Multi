@@ -6,6 +6,8 @@ using System.Text;
 
 namespace Multi.Data
 {
+    using UnitOfWork;
+
     /// <summary>
     /// Abstract base class for entity repositories of entity types having primary key
     /// </summary>

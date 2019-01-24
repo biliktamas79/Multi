@@ -2,6 +2,9 @@
 
 namespace Multi.Data
 {
+    using EntityRegistration;
+    using UnitOfWork;
+
     /// <summary>
     /// Generic class that represents an entity reference by primary key
     /// (This is the default <see cref="IEntityReferenceByPk{TPrimaryKey, TEntity}"/> implementation)
@@ -43,13 +46,13 @@ namespace Multi.Data
         /// <param name="uow">The UnitOfWork</param>
         public EntityReferenceByPk(TPrimaryKey pk, IUnitOfWorkBase uow)
         {
-            Throw.IfArgumentIsNull(uow, "uow");
+            Throw.IfArgumentIsNull(uow, nameof(uow));
 
             this.Pk = pk;
             this._uowRef = new WeakReference<IUnitOfWorkBase>(uow, false);
             this._dbCtx = uow.DbContext;
             if (CheckPkEqualityDelegate == null)
-                CheckPkEqualityDelegate = ((ModelEntityRegistration<TPrimaryKey, TEntity>)this._dbCtx.GetModelEntityRegistrationBase<TEntity>(true)).CheckPkEqualityDelegate;
+                CheckPkEqualityDelegate = ((ModelEntityRegistration<TPrimaryKey, TEntity>)this._dbCtx.ModelEntityRegistrationsByType.Get<TEntity>(true)).CheckPkEqualityDelegate;
         }
 
         private TPrimaryKey _pk;

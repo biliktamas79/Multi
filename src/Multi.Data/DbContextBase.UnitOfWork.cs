@@ -9,39 +9,19 @@ using System.Threading;
 
 namespace Multi.Data
 {
+    using UnitOfWork;
+
     /// <summary>
     /// Abstract base class for database contexts
     /// </summary>
     public abstract partial class DbContextBase
     {
-		#region PROPERTIES
-		protected readonly object _uowDictLockObj = new object();
-		private ConcurrentDictionary<int, IUnitOfWorkBase> _uowDict = null;
         /// <summary>
-        /// Gets the unit of work dictionary.
+        /// Read-only unit of work registry instance containing the unit of work instances by their Id
         /// </summary>
-        /// <value>
-        /// The uow dictionary.
-        /// </value>
-        protected ConcurrentDictionary<int, IUnitOfWorkBase> UowDict
-		{
-			get
-			{
-				if (_uowDict == null)
-				{
-					lock (_uowDictLockObj)
-					{
-						// még egy ellenőrzés biztos, ami biztos
-						if (_uowDict == null)
-						{
-							_uowDict = new ConcurrentDictionary<int, IUnitOfWorkBase>();
-						}
-					}
-				}
-				return _uowDict;
-			}
-		}
+        protected readonly IUnitOfWorkRegistry UowsById;
 
+        #region PROPERTIES
         /// <summary>
         /// Gets the count of registered unit of work instances.
         /// </summary>
@@ -50,11 +30,7 @@ namespace Multi.Data
         /// </value>
         public int UnitOfWorkCount
         {
-            get
-            {
-                var dict = _uowDict;
-                return (dict == null) ? 0 : dict.Count;
-            }
+            get { return UowsById.Count; }
         }
         #endregion PROPERTIES
 
@@ -67,8 +43,7 @@ namespace Multi.Data
         /// </returns>
         public bool ContainsUnitOfWork(int uowID)
 		{
-			var dict = _uowDict;
-			return (dict != null) && dict.ContainsKey(uowID);
+            return this.UowsById.Contains(uowID);
 		}
 
         /// <summary>
@@ -103,7 +78,7 @@ namespace Multi.Data
         public void ExecuteInUow(Action<IUnitOfWorkBase> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             ThrowIfDisposingOrDisposed();
             using (var uow = InitNewUnitOfWork())
             {
@@ -128,14 +103,11 @@ namespace Multi.Data
             Logger?.LogTrace("Registering UnitOfWork ({uow.id}, {uow.type}) in {dbCtx.type}...", uow.UowId, uow.GetType(), this.GetType());
 
             ThrowIfDisposingOrDisposed();
-			lock (_uowDictLockObj)
-			{
-                if (!this.UowDict.TryAdd(uow.UowId, uow))
-                    throw new ArgumentException($"Unit of work with Id {uow.UowId} already exists!", nameof(uow));
 
-                OnUnitOfWorkAdded(uow);
-                this.IsBusy = (_uowDict.Count > 0);
-			}
+            this.UowsById.Add(uow);
+
+            OnUnitOfWorkAdded(uow);
+            this.IsBusy = !this.UowsById.IsEmpty;
 		}
 
         /// <summary>
@@ -150,30 +122,19 @@ namespace Multi.Data
             Logger?.LogTrace("Unregistering UnitOfWork ({uow.id}, {uow.type}) in {dbCtx.type}...", uow.UowId, uow.GetType(), this.GetType());
 
             //ThrowIfDisposingOrDisposed();
-            if (_uowDict != null)
-			{
-				lock (_uowDictLockObj)
-				{
-					// még egy ellenőrzés biztos, ami biztos
-					if (_uowDict != null)
-					{
-                        Logger?.LogTrace("Removing UnitOfWork ({uow.id}, {uow.type}) from {dbCtx.type}...", uow.UowId, uow.GetType(), this.GetType());
 
-                        if (_uowDict.TryRemove(uow.UowId, out var removedUow))
-                        {
-                            if (!object.ReferenceEquals(uow, removedUow))
-                            {
-                                throw new ArgumentException($"Unit of work instance removed by Id {uow.UowId} not equals the given instance!");
-                            }
+            if (this.UowsById.TryRemove(uow.UowId, out var removedUow))
+            {
+                if (!object.ReferenceEquals(uow, removedUow))
+                {
+                    throw new ArgumentException($"Unit of work instance removed by Id {uow.UowId} not equals the given instance!");
+                }
 
-                            Logger?.LogTrace("UnitOfWork ({uow.id}, {uow.type}) removed from {dbCtx.type}.", uow.UowId, uow.GetType(), this.GetType());
+                Logger?.LogTrace("UnitOfWork ({uow.id}, {uow.type}) removed from {dbCtx.type}.", uow.UowId, uow.GetType(), this.GetType());
 
-                            OnUnitOfWorkRemoved(uow);
-                            this.IsBusy = (_uowDict.Count > 0);
-                        }
-					}
-				}
-			}
+                OnUnitOfWorkRemoved(uow);
+                this.IsBusy = !this.UowsById.IsEmpty;
+            }
 		}
 
         /// <summary>

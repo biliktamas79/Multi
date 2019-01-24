@@ -162,10 +162,10 @@ namespace System
             //.ImplementedInterfaces.Contains(interfaceType);
         }
 
-        public static Type[] GetGenericArguments(this Type type)
-        {
-            return type.GetTypeInfo().GenericTypeArguments;
-        }
+        //public static Type[] GetGenericArguments(this Type type)
+        //{
+        //    return type.GetTypeInfo().GenericTypeArguments;
+        //}
 
         public static TypeInfo GetTypeInfo(this Type type)
         {

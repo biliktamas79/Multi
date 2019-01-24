@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace Multi.Data
+namespace Multi.Data.EntityRegistration
 {
     /// <summary>
-    /// Abstract base class for model entity registrations of entity types not having a primary key
+    /// Class for model entity registrations of entity types not having primary key
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity</typeparam>
     public class ModelEntityRegistration<TEntity> : ModelEntityRegistrationBase
@@ -28,7 +28,7 @@ namespace Multi.Data
         /// </returns>
         public override string ToString()
         {
-            return this.GetType().GetFriendlyTypeName();
+            return $"{this.GetType().GetFriendlyTypeName()} to table '{TableName}'.";
         }
     }
 }

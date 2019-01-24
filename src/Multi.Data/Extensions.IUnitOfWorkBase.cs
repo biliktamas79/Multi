@@ -5,6 +5,8 @@ using System.Text;
 
 namespace Multi.Data
 {
+    using UnitOfWork;
+
     public static partial class Extensions
 	{
         /// <summary>

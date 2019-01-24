@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Multi.Data
+namespace Multi.Data.UnitOfWork
 {
     /// <summary>
     /// Interface for async UnitOfWork components

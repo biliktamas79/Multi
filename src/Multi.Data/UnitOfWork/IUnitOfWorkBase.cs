@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Multi.Data
+namespace Multi.Data.UnitOfWork
 {
     /// <summary>
     /// Interface for UnitOfWork components

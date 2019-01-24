@@ -16,7 +16,7 @@ namespace Multi.Data
             if (entityType == null)
                 throw new ArgumentNullException("entityType");
 
-            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "Entity repo (EntityType='{1}') not found.", entityType);
+            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "Entity repo (EntityType='{0}') not found.", entityType);
         }
 
         public static EntityRepoNotFoundException New<TEntity>()

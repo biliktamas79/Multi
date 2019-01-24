@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace Multi.Data
+namespace Multi.Data.UnitOfWork
 {
-    abstract partial class UnitOfWorkBase
+    abstract partial class UnitOfWorkBaseAsync
 	{
         //protected internal bool TryGetModelEntityRegistration<TEntity>(out ModelEntityRegistrationBase reg)
         //{

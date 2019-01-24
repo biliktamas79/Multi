@@ -7,7 +7,7 @@ using System.Text;
 using Multi;
 using Microsoft.Extensions.Logging;
 
-namespace Multi.Data
+namespace Multi.Data.UnitOfWork
 {
     /// <summary>
     /// Abstract base class for UnitOfWork components
@@ -305,8 +305,8 @@ namespace Multi.Data
         {
             ThrowIfDisposingOrDisposed();
 
-            var reg = this.DbContext.GetModelEntityRegistrationBase<TEntity>(true);
-            return ((ModelEntityRegistration<TPrimaryKey, TEntity>)reg).NewEntityReferenceByPkFactory(this, pk);
+            var modelEntityRegistration = this.DbContext.ModelEntityRegistrationsByType.Get<TPrimaryKey, TEntity>(true);
+            return modelEntityRegistration.NewEntityReferenceByPkFactory(this, pk);
         }
 
         /// <summary>

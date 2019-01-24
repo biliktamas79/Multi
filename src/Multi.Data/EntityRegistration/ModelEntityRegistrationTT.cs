@@ -4,10 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Multi.Data
+namespace Multi.Data.EntityRegistration
 {
+    using UnitOfWork;
+
     /// <summary>
-    /// Abstract base class for model entity registrations of entity types having primary key
+    /// Class for model entity registrations of entity types having primary key
     /// </summary>
     /// <typeparam name="TPrimaryKey">The type of the primary key</typeparam>
     /// <typeparam name="TEntity">The type of the entity</typeparam>
@@ -78,7 +80,7 @@ namespace Multi.Data
         /// </returns>
         public override string ToString()
         {
-            return this.GetType().GetFriendlyTypeName();
+            return $"{this.GetType().GetFriendlyTypeName()} to table '{TableName}'.";
         }
     }
 }
