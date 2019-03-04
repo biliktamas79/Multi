@@ -1,3 +1,4 @@
+//// https://en.wikipedia.org/wiki/Kibibyte
 using System;
 using System.Globalization;
 using System.Text;
@@ -6,7 +7,6 @@ namespace Multi
 {
     /// <summary>
     /// Struct representing the size of data
-    /// https://en.wikipedia.org/wiki/Kibibyte
     /// </summary>
     [Serializable]
 	public struct DataSize : IEquatable<DataSize>, IComparable<DataSize>
