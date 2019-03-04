@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentFTP;
+using Multi.IO.Remote;
 
 namespace Multi.IO.FTP.FluentFTP
 {
@@ -12,7 +13,7 @@ namespace Multi.IO.FTP.FluentFTP
     /// FluentFTP specific implementation of the <see cref="IAsyncFtpClient"/> interface.
     /// </summary>
     /// <seealso cref="Multi.IO.FTP.IAsyncFtpClient" />
-    public class FluentFtpClient : IAsyncFtpClient
+    public class FluentFtpClient : IAsyncRemoteFileStorageClient
     {
         private readonly IFtpClient ftpClient;
         private readonly Uri baseUri;
